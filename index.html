@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Animação com requestAnimationFrame</title>
+</head>
+
+<body>
+    <canvas id="meu_canvas" width="300" height="300"></canvas>
+
+    <script>
+        const canvas = document.getElementById('meu_canvas');
+        const context = canvas.getContext('2d');
+
+        const bolas = [
+            { x: 20, y: 100, raio: 10, cor: 'blue', velocidadeX: 2, velocidadeY: 2 },
+            { x: 150, y: 150, raio: 15, cor: 'red', velocidadeX: -1, velocidadeY: 1 },
+            { x: 250, y: 50, raio: 8, cor: 'yellow', velocidadeX: 1, velocidadeY: -2 }
+        ];
+
+        const desenharBola = (bola) => {
+            context.beginPath();
+            context.arc(bola.x, bola.y, bola.raio, 0, Math.PI * 2);
+            context.fillStyle = bola.cor;
+            context.fill();
+            context.closePath();
+        };
+
+        const mexerBolas = () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < bolas.length; i++) {
+                const bola = bolas[i];
+
+                desenharBola(bola);
+
+                bola.x += bola.velocidadeX;
+                bola.y += bola.velocidadeY;
+
+                if (bola.x + bola.raio > canvas.width || bola.x - bola.raio < 0) {
+                    bola.velocidadeX = -bola.velocidadeX;
+                }
+
+                if (bola.y + bola.raio > canvas.height || bola.y - bola.raio < 0) {
+                    bola.velocidadeY = -bola.velocidadeY;
+                }
+            }
+
+            requestAnimationFrame(mexerBolas);
+        };
+
+        requestAnimationFrame(mexerBolas);
+    </script>
+</body>
+
+</html>
